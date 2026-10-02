@@ -77,3 +77,46 @@ document.getElementById("clearWishes").addEventListener("click", function () {
 renderWishes();
 updateCountdown();
 setInterval(updateCountdown, 1000);
+const slider = document.getElementById("sliderWrapper");
+const slides = slider ? Array.from(slider.querySelectorAll(".slide")) : [];
+const sliderControls = document.querySelector(".slider-controls");
+let currentSlide = slides.findIndex((slide) => slide.classList.contains("active"));
+let pointerStartX = null;
+
+if (slider && slides.length > 0) {
+  if (currentSlide < 0) currentSlide = 0;
+
+  function showSlide(index) {
+    currentSlide = (index + slides.length) % slides.length;
+    slides.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === currentSlide;
+      slide.classList.toggle("active", isActive);
+      slide.setAttribute("aria-hidden", String(!isActive));
+    });
+  }
+
+  sliderControls?.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-direction]");
+    if (button) showSlide(currentSlide + Number(button.dataset.direction));
+  });
+
+  slider.addEventListener("pointerdown", (event) => {
+    pointerStartX = event.clientX;
+  });
+
+  slider.addEventListener("pointerup", (event) => {
+    if (pointerStartX === null) return;
+    const distance = event.clientX - pointerStartX;
+    pointerStartX = null;
+    if (Math.abs(distance) >= 50) showSlide(currentSlide + (distance < 0 ? 1 : -1));
+  });
+
+  slider.addEventListener("pointercancel", () => {
+    pointerStartX = null;
+  });
+
+  slider.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") showSlide(currentSlide - 1);
+    if (event.key === "ArrowRight") showSlide(currentSlide + 1);
+  });
+}

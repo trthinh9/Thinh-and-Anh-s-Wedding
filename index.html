@@ -18,30 +18,36 @@
   </head>
   <body>
     <header class="hero">
+      
       <div class="container hero-inner">
-        <div class="top-tag">Lời thân mời từ</div>
-        <h1 class="names">
-          Nguyễn Dương <br />
-          Trường Thịnh
-          <span class="ampersand">&amp;</span>
-          Phạm Thị <br />
-          Ngọc Ánh
-        </h1>
-        <div class="date-line">Chủ nhật, 29 tháng 11 năm 2026</div>
-
-        <div class="hero-card">
-          <div class="invitation">
-            <h2>Hạnh phúc bắt đầu từ đây</h2>
-            <p>
-              Trân trọng kính mời quý vị, đại biểu cùng gia đình đến dự lễ thành hôn
-              của chúng tôi. Sự hiện diện của quý vị là niềm hân hoan lớn nhất, góp
-              phần làm nên một ngày vui trọn vẹn và ý nghĩa.
-            </p>
+        <div class="image-frame" id="sliderWrapper" role="region" aria-roledescription="carousel" aria-label="Ảnh cưới" tabindex="0">
+          <div class="slide active">
+            <img class="slide-backdrop" src="Image/ATUS8845.JPG" alt="" aria-hidden="true" />
+            <img class="slide-image" src="Image/ATUS8845.JPG" alt="Ảnh cưới của Thịnh và Ánh" />
           </div>
-
-          <div class="image-frame" aria-label="Wedding illustration">
-            <div class="image-center"></div>
+          <div class="slide" aria-hidden="true">
+            <img class="slide-backdrop" src="Image/ATUS8859.JPG" alt="" aria-hidden="true" />
+            <img class="slide-image" src="Image/ATUS8859.JPG" alt="Ảnh cưới của Thịnh và Ánh" />
           </div>
+          <div class="slide" aria-hidden="true">
+            <img class="slide-backdrop" src="Image/ATUS9229.JPG" alt="" aria-hidden="true" />
+            <img class="slide-image" src="Image/ATUS9229.JPG" alt="Ảnh cưới của Thịnh và Ánh" />
+          </div>
+        </div>
+
+        <div class="slider-controls" aria-label="Điều khiển ảnh cưới">
+          <button class="btn btn-prev" type="button" data-direction="-1" aria-label="Xem ảnh trước">&#10094;</button>
+          <button class="btn btn-next" type="button" data-direction="1" aria-label="Xem ảnh tiếp theo">&#10095;</button>
+        </div>
+
+        <div class="hero-caption">
+          <div class="top-tag">Lời thân mời từ</div>
+          <h1 class="names">
+            Nguyễn Dương Trường Thịnh
+            <span class="ampersand">&amp;</span>
+            Phạm Thị Ngọc Ánh
+          </h1>
+          <div class="date-line">Chủ nhật, 29 tháng 11 năm 2026</div>
         </div>
       </div>
     </header>
