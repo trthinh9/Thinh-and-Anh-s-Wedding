@@ -538,20 +538,119 @@ footer {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+
+  .hero {
+    min-height: auto;
+    padding-top: 26px;
+  }
+
+  .hero-inner {
+    padding: 18px 12px 20px;
+    border-radius: 20px;
+  }
+
+  .top-tag {
+    letter-spacing: 0.16rem;
+    font-size: 0.62rem;
+  }
+
+  .names {
+    font-size: clamp(2.6rem, 11vw, 4.2rem);
+    letter-spacing: 0.02em;
+  }
+
+  .date-line {
+    margin-top: 18px;
+    font-size: 0.7rem;
+    letter-spacing: 0.08rem;
+  }
+
+  .hero-card,
+  .story,
+  .details,
+  .rsvp,
+  .wish-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-card {
+    gap: 18px;
+  }
+
+  .invitation {
+    padding: 4px 8px;
+  }
+
+  .invitation p,
+  .story-box p,
+  .rsvp-box p,
+  .note-box p,
+  .wish-item p {
+    line-height: 1.8;
+  }
+
+  .image-frame {
+    height: 260px;
+  }
+
+  .image-center {
+    width: 160px;
+    height: 160px;
+  }
+
   .section {
     padding: 70px 0;
   }
 
-  .names {
-    letter-spacing: 0.02em;
+  .section-title h3 {
+    font-size: clamp(2.1rem, 8vw, 3rem);
   }
 
-  .cta-row {
-    flex-direction: column;
+  .story-box,
+  .detail-card,
+  .rsvp-box,
+  .note-box,
+  .wish-box,
+  .wish-form-card {
+    padding: 18px 16px;
+  }
+
+  .countdown {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+  }
+
+  .time-box {
+    padding: 16px 10px;
+  }
+
+  .time-box strong {
+    font-size: 2.1rem;
+  }
+
+  .cta-row,
+  .form-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
 
   .btn {
     width: 100%;
+    min-height: 46px;
+  }
+
+  .form-input,
+  .form-textarea {
+    padding: 12px 14px;
+  }
+
+  .form-textarea {
+    min-height: 110px;
   }
 }
