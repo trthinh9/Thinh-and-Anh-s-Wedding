@@ -217,6 +217,26 @@ a {
   color: white;
 }
 
+.scroll-hint {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 16px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.68rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+}
+
+.scroll-hint-arrow {
+  display: block;
+  font-size: 1.8rem;
+  line-height: 0.8;
+  animation: scroll-hint-bounce 1.4s ease-in-out infinite;
+}
+
 .hero-card {
   display: grid;
   grid-template-columns: 1.2fr 0.8fr;
@@ -369,9 +389,15 @@ a {
 
 .family-member {
   margin: 0;
-  color: var(--muted);
-  font-size: 0.94rem;
-  line-height: 1.7;
+  color: var(--rose-deep);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.32rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.family-card-parents .family-member + .family-member {
+  margin-top: 3px;
 }
 
 .family-address {
@@ -1062,6 +1088,16 @@ footer {
     letter-spacing: 0.08rem;
   }
 
+  .scroll-hint {
+    margin-top: 12px;
+    font-size: 0.62rem;
+    letter-spacing: 0.07rem;
+  }
+
+  .scroll-hint-arrow {
+    font-size: 1.6rem;
+  }
+
   .hero-card,
   .story,
   .family-grid,
@@ -1204,8 +1240,23 @@ footer {
   }
 }
 
+@keyframes scroll-hint-bounce {
+  0%, 100% {
+    opacity: 0.65;
+    transform: translateY(-3px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(5px);
+  }
+}
+
 /* Tôn trọng cài đặt giảm chuyển động của thiết bị; giữ hiệu ứng không gây khó chịu. */
 @media (prefers-reduced-motion: reduce) {
+  .scroll-hint-arrow {
+    animation: none;
+  }
+
   .time-box strong {
     font-size: 2.1rem;
   }
