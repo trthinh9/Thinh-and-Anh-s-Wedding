@@ -80,6 +80,7 @@ setInterval(updateCountdown, 1000);
 const slider = document.getElementById("sliderWrapper");
 const slides = slider ? Array.from(slider.querySelectorAll(".slide")) : [];
 const sliderControls = document.querySelector(".slider-controls");
+const swipeHint = document.querySelector(".swipe-hint");
 let currentSlide = slides.findIndex((slide) => slide.classList.contains("active"));
 let pointerStartX = null;
 
@@ -108,7 +109,10 @@ if (slider && slides.length > 0) {
     if (pointerStartX === null) return;
     const distance = event.clientX - pointerStartX;
     pointerStartX = null;
-    if (Math.abs(distance) >= 50) showSlide(currentSlide + (distance < 0 ? 1 : -1));
+    if (Math.abs(distance) >= 50) {
+      showSlide(currentSlide + (distance < 0 ? 1 : -1));
+      swipeHint?.classList.add("is-hidden");
+    }
   });
 
   slider.addEventListener("pointercancel", () => {
