@@ -17,9 +17,26 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!--
+      HƯỚNG DẪN CHỈNH SỬA NHANH:
+      - Nội dung, tên, lời mời, ảnh và liên kết nằm trong index.html.
+      - Giao diện, màu sắc và kích thước nằm trong styles.css.
+      - Đếm ngược, chuyển ảnh, phát nhạc và lời chúc nằm trong script.js.
+      - Ảnh nên đặt trong thư mục Image; âm thanh có thể đặt trong Audio.
+        Đường dẫn tương đối như Image/ten-anh.jpg hoặc Audio/ten-nhac.mp3
+        được tính từ vị trí của index.html. Tên thư mục/tệp phải đúng chữ hoa-thường.
+    -->
     <header class="hero">
       
       <div class="container hero-inner">
+        <!--
+          SLIDESHOW ẢNH BÌA:
+          Mỗi khối .slide là một ảnh. Để thay ảnh, đổi src của cả .slide-backdrop
+          và .slide-image trong cùng khối, đồng thời sửa alt để mô tả ảnh.
+          Để thêm ảnh, sao chép một khối .slide hoàn chỉnh và thay hai đường dẫn src.
+          Chỉ ảnh đầu tiên nên có class "active"; các ảnh còn lại để JS tự bật/tắt.
+          Dấu chấm và tự chuyển ảnh được tạo tự động theo số khối .slide (tối đa 5 dấu chấm).
+        -->
         <div class="image-frame" id="sliderWrapper" role="region" aria-roledescription="carousel" aria-label="Ảnh cưới" tabindex="0">
           <div class="slide active">
             <img class="slide-backdrop" src="Image/ATUS8845.JPG" alt="" aria-hidden="true" />
@@ -43,10 +60,11 @@
         <div class="hero-caption">
           <div class="slide-indicators" role="group" aria-label="Chọn ảnh"></div>
           <div class="top-tag">Lời thân mời từ</div>
+          <!-- Sửa tên tại đây. Nếu dùng class name-nowrap, cụm từ bên trong sẽ không bị ngắt dòng. -->
           <h1 class="names">
-            Nguyễn Dương <span class="name-nowrap">Trường Thịnh</span>
+            Trường Thịnh
             <span class="ampersand">&amp;</span>
-            Phạm Thị Ngọc Ánh
+            Ngọc Ánh
           </h1>
           <div class="date-line">Chủ nhật, 29 tháng 11 năm 2026</div>
         </div>
@@ -54,34 +72,66 @@
     </header>
 
     <main>
-      <section class="section">
+      <!-- THÀNH VIÊN GIA ĐÌNH: sửa nội dung từng thẻ; thay ảnh bằng src mới trong thư mục Image. -->
+      <section class="section family-section">
         <div class="container">
           <div class="section-title">
-            <div class="eyebrow">Câu chuyện của chúng tôi</div>
-            <h3>Vì một tình yêu đẹp</h3>
+            <div class="eyebrow">Các thành viên trong</div>
+            <h3>Đại gia đình chúng tôi</h3>
           </div>
 
-          <div class="story">
-            <div class="story-box">
-              <h4>Gặp nhau</h4>
-              <p>
-                Chúng tôi gặp nhau trong một ngày bình thường, giữa những cuộc trò chuyện
-                nhẹ nhàng và những khoảnh khắc bất chợt khiến trái tim dần hiểu rằng mình
-                đã tìm thấy nơi bình yên thật sự.
-              </p>
-            </div>
-            <div class="story-box">
-              <h4>Yêu nhau</h4>
-              <p>
-                Từ những chuyến đi ngắn, những câu hỏi ngây ngô và những nụ cười thật lòng,
-                tình yêu của chúng tôi đã lớn lên từng ngày, chậm rãi nhưng chắc chắn, như
-                một lời hẹn chân thành cho tương lai.
-              </p>
-            </div>
+          <div class="family-grid">
+            <article class="family-card family-card-parents">
+              <div class="family-card-mark" aria-hidden="true">01</div>
+              <div class="family-card-content">
+                <div class="family-card-label">Gia đình chú rể</div>
+                <h4>Nhà trai</h4>
+                <p class="family-member">Ông Nguyễn Công Trường Giang</p>
+                <p class="family-member">Bà Dương Thị Thu Hằng</p>
+                <p class="family-address">20B1 Trần Thị Thơm, Phường Mỹ Phong, Tỉnh Đồng Tháp.</p>
+              </div>
+            </article>
+
+            <article class="family-card family-card-parents">
+              <div class="family-card-mark" aria-hidden="true">02</div>
+              <div class="family-card-content">
+                <div class="family-card-label">Gia đình cô dâu</div>
+                <h4>Nhà gái</h4>
+                <p class="family-member">Ông Phạm Văn Mừng</p>
+                <p class="family-member">Bà Nguyễn Thị Cẩm Đào</p>
+                <p class="family-address">Xã Tân Phước 1, Tỉnh Đồng Tháp.</p>
+              </div>
+            </article>
+
+            <article class="family-card family-card-person">
+              <div class="family-photo">
+                <!-- Ảnh chú rể; nên dùng ảnh chân dung rõ nét để khung ảnh cắt đẹp trên điện thoại. -->
+                <img src="Image/ATUS8845.JPG" alt="Chú rể Nguyễn Dương Trường Thịnh" />
+              </div>
+              <div class="family-card-content">
+                <div class="family-card-label">Chú rể</div>
+                <h4>Nguyễn Dương<br />Trường Thịnh</h4>
+                <p class="family-role">Trân trọng kính mời</p>
+              </div>
+            </article>
+
+            <article class="family-card family-card-person">
+              <div class="family-photo">
+                <!-- Ảnh cô dâu; sửa src và alt cùng lúc khi thay ảnh. -->
+                <img src="Image/ATUS8859.JPG" alt="Cô dâu Phạm Thị Ngọc Ánh" />
+              </div>
+              <div class="family-card-content">
+                <div class="family-card-label">Cô dâu</div>
+                <h4>Phạm Thị Ngọc Ánh</h4>
+                <p class="family-role">Trân trọng kính mời</p>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
+      <!-- ĐẾM NGƯỢC: ngày/giờ thật được cấu hình trong biến weddingDate ở đầu script.js.
+           Không đổi các id days/hours/minutes/seconds nếu chưa sửa JavaScript tương ứng. -->
       <section class="section">
         <div class="container">
           <div class="section-title">
@@ -110,31 +160,77 @@
         </div>
       </section>
 
-      <section class="section">
+      <!--
+        CHỈNH SỬA THÔNG TIN BUỔI LỄ:
+        - Ngày và giờ hiển thị trên thẻ màu hồng nằm trong .event-date-card.
+        - Địa chỉ và tên địa điểm nằm trong .event-venue-card.
+        - Đường dẫn nút "Xem bản đồ" là thuộc tính href của .event-map-link.
+        - Các mốc giờ, tên nghi lễ và nơi tổ chức nằm trong .event-timeline-items.
+        Nếu đổi ngày cưới, hãy cập nhật đồng bộ ngày ở ảnh bìa và ngày cưới trong script.js
+        để phần đếm ngược cũng chính xác.
+      -->
+      <section class="section event-section">
         <div class="container">
           <div class="section-title">
-            <div class="eyebrow">Thông tin</div>
-            <h3>Sự kiện cưới</h3>
+            <div class="eyebrow">Ngày vui của chúng tôi</div>
+            <h3>Chi tiết buổi lễ</h3>
           </div>
 
-          <div class="details">
-            <div class="detail-card">
-              <div class="detail-icon">⏰</div>
-              <h4>Thời gian</h4>
-              <p>
-                Chủ nhật<br />
-                09:00 - 11:30<br />
-                29 tháng 11 năm 2026
-              </p>
+          <!-- Hai thẻ tổng quan: thông tin ngày/giờ và địa điểm tổ chức tiệc. -->
+          <div class="event-overview">
+            <article class="event-date-card">
+              <!-- Sửa ngày, tháng, năm tại đây; số ngày được trình bày riêng để dễ làm nổi bật. -->
+              <div class="event-card-label">Chủ nhật</div>
+              <div class="event-date">
+                <span class="event-date-day">29</span>
+                <span class="event-date-month">THÁNG 11<br />2026</span>
+              </div>
+              <!-- Khung giờ tổng quan của buổi lễ. -->
+              <div class="event-date-time">09:00 – 11:30</div>
+            </article>
+
+            <article class="event-venue-card">
+              <div class="event-icon" aria-hidden="true">⌖</div>
+              <div class="event-card-label">Địa điểm tổ chức tiệc</div>
+              <!-- Sửa tên địa điểm trong tiêu đề và địa chỉ ở đoạn văn bên dưới. -->
+              <h4>Cảng du thuyền Mỹ Tho<br />Mytho Marina</h4>
+              <p>Số 1 Hoàng Sa, Phường Đạo Thạnh, Tỉnh Đồng Tháp</p>
+              <!-- Thay URL trong href bằng liên kết bản đồ mới nếu địa điểm thay đổi. -->
+              <a
+                class="event-map-link"
+                href="https://maps.app.goo.gl/VLavEw7Q3nSVLwDc7"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Xem bản đồ <span aria-hidden="true">↗</span>
+              </a>
+            </article>
+          </div>
+
+          <!-- Thêm hoặc xóa một article.event-timeline-item để cập nhật các hoạt động trong ngày. -->
+          <div class="event-timeline">
+            <div class="event-timeline-heading">
+              <span class="event-timeline-flourish" aria-hidden="true">✦</span>
+              <h4>Lịch trình trong ngày</h4>
             </div>
 
-            <div class="detail-card">
-              <div class="detail-icon">📍</div>
-              <h4>Địa điểm</h4>
-              <p>
-                Cảng du thuyền Mỹ Tho - Mytho Marina<br />
-                Số 1 Hoàng Sa, Phường Đạo Thạnh, Tỉnh Đồng Tháp
-              </p>
+            <div class="event-timeline-items">
+              <article class="event-timeline-item">
+                <!-- datetime dùng định dạng YYYY-MM-DDTHH:mm; chữ hiển thị nằm giữa thẻ time. -->
+                <time datetime="2026-11-29T09:00">09:00</time>
+                <div>
+                  <h5>Lễ thành hôn</h5>
+                  <p>Tại tư gia nhà trai</p>
+                </div>
+              </article>
+
+              <article class="event-timeline-item">
+                <time datetime="2026-11-29T10:00">10:00</time>
+                <div>
+                  <h5>Tiệc mừng lễ thành hôn</h5>
+                  <p>Tại Cảng du thuyền Mỹ Tho – Mytho Marina</p>
+                </div>
+              </article>
             </div>
           </div>
         </div>
@@ -147,7 +243,7 @@
             <h3>Trân trọng chào đón</h3>
           </div>
 
-          <div class="rsvp">
+          <div class="rsvp rsvp-contact">
             <div class="rsvp-box">
               <h4>Thông tin liên hệ</h4>
               <p>
@@ -156,18 +252,12 @@
               </p>
 
               <div class="cta-row">
+                <!-- Đổi số điện thoại trong href tel:; chỉ sửa phần chữ sẽ không đổi số được gọi. -->
                 <a class="btn btn-primary" href="tel:+84706630777">Gọi chú rể</a>
                 <a class="btn btn-primary" href="tel:+84337596554">Gọi cô dâu</a>
+                <!-- Liên kết bản đồ này độc lập với liên kết bản đồ trong phần chi tiết buổi lễ. -->
                 <a class="btn btn-secondary" href="https://maps.app.goo.gl/VLavEw7Q3nSVLwDc7">Xem bản đồ</a>
               </div>
-            </div>
-
-            <div class="note-box">
-              <div class="quote">“</div>
-              <p>
-                Tình yêu không chỉ là một khoảnh khắc ngọt ngào, mà là một hành trình cùng
-                nhau bước qua mọi mùa của cuộc đời.
-              </p>
             </div>
           </div>
         </div>
@@ -176,13 +266,14 @@
       <section class="section">
         <div class="container">
           <div class="section-title">
-            <div class="eyebrow">Gửi đến chúng tôi</div>
+            <div class="eyebrow">Chúng tôi trân trọng nhận</div>
             <h3>Những lời chúc</h3>
           </div>
 
           <div class="wish-layout">
             <div class="wish-form-card">
               <h4>Nhập thông tin</h4>
+              <!-- Không đổi các id/form field nếu không cập nhật các selector trong script.js. -->
               <form class="wish-form" id="wishForm">
                 <div class="form-group">
                   <label class="form-label" for="guestName">Tên khách mời</label>
@@ -209,6 +300,7 @@
 
                 <div class="form-actions">
                   <button type="submit" class="btn btn-primary">Gửi lời chúc</button>
+                  <!-- Xóa tất cả lời chúc đã lưu trên trình duyệt hiện tại. -->
                   <button type="button" class="btn btn-secondary" id="clearWishes">Xóa tất cả</button>
                 </div>
               </form>
@@ -227,6 +319,11 @@
 
     <footer>Sweet love • Trường Thịnh &amp; Ngọc Ánh</footer>
 
+    <!--
+      NHẠC NỀN: thay giá trị src bằng đường dẫn tệp của bạn, ví dụ Audio/nhac-cuoi.mp3.
+      Đặt tệp trong thư mục Audio cạnh index.html. Nhạc chỉ phát sau khi khách bấm nút loa.
+      Giữ id="backgroundMusic" để nút bật/tắt trong script.js tiếp tục hoạt động.
+    -->
     <audio
       id="backgroundMusic"
       src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"

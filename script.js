@@ -1,5 +1,14 @@
+/*
+  JAVASCRIPT CỦA THIỆP CƯỚI
+  Các phần dưới đây điều khiển đếm ngược, lời chúc, nút nhạc và slideshow.
+  Khi chỉnh HTML, giữ nguyên các id được truy vấn ở đây hoặc cập nhật selector tương ứng.
+*/
+
+// ĐỔI NGÀY CƯỚI: dùng định dạng YYYY-MM-DDTHH:mm theo giờ địa phương của thiết bị.
+// Đồng bộ ngày này với ngày được ghi trong index.html và các mốc lịch trình.
 const weddingDate = new Date("2026-11-29T09:00:00");
 
+// Tính thời gian còn lại và cập nhật bốn ô có id days, hours, minutes, seconds trong index.html.
 function updateCountdown() {
   const now = new Date();
   const diff = weddingDate - now;
@@ -23,6 +32,8 @@ function updateCountdown() {
   document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
 }
 
+// LỜI CHÚC: dữ liệu được lưu trong localStorage của trình duyệt/thiết bị đang mở trang.
+// Đổi STORAGE_KEY sẽ tạo một ngăn lưu trữ mới; lời chúc cũ trong ngăn cũ sẽ không bị xóa.
 const STORAGE_KEY = "weddingGuestWishes";
 const wishForm = document.getElementById("wishForm");
 const wishList = document.getElementById("wishList");
@@ -32,6 +43,7 @@ const guestWishInput = document.getElementById("guestWish");
 
 let wishes = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
 
+// Vẽ lại danh sách lời chúc và số lượng sau khi tải trang, thêm lời chúc hoặc xóa dữ liệu.
 function renderWishes() {
   if (!wishes.length) {
     wishList.innerHTML = '<div class="empty-state">Chưa có lời chúc nào. Hãy là người đầu tiên gửi lời yêu thương nhé!</div>';
@@ -53,6 +65,7 @@ function renderWishes() {
   summaryCount.textContent = `${wishes.length} lời chúc`;
 }
 
+// Khi khách gửi biểu mẫu, lưu tên và lời chúc trên thiết bị rồi xóa nội dung biểu mẫu.
 wishForm.addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -68,15 +81,21 @@ wishForm.addEventListener("submit", function (event) {
   guestNameInput.focus();
 });
 
+// Chỉ xóa lời chúc đã lưu trên trình duyệt hiện tại, không ảnh hưởng thiết bị khác.
 document.getElementById("clearWishes").addEventListener("click", function () {
   wishes = [];
   localStorage.setItem(STORAGE_KEY, JSON.stringify(wishes));
   renderWishes();
 });
 
+// Khôi phục lời chúc đã lưu và bắt đầu cập nhật đồng hồ mỗi giây.
 renderWishes();
 updateCountdown();
 setInterval(updateCountdown, 1000);
+
+// SLIDESHOW:
+// Mỗi phần tử .slide trong #sliderWrapper là một ảnh. Thêm/xóa .slide trong index.html,
+// dấu chấm sẽ tự cập nhật; tối đa 5 dấu chấm được hiển thị cùng lúc.
 const slider = document.getElementById("sliderWrapper");
 const slides = slider ? Array.from(slider.querySelectorAll(".slide")) : [];
 const sliderControls = document.querySelector(".slider-controls");
@@ -87,6 +106,8 @@ let currentSlide = slides.findIndex((slide) => slide.classList.contains("active"
 let pointerStartX = null;
 let autoplayTimer;
 
+// NHẠC NỀN: trạng thái chỉ đổi sau khi thao tác phát/dừng thành công.
+// Đổi tệp nhạc bằng thuộc tính src của #backgroundMusic trong index.html.
 if (backgroundMusic && audioToggle) {
   audioToggle.addEventListener("click", async () => {
     if (backgroundMusic.paused) {
@@ -114,6 +135,7 @@ if (backgroundMusic && audioToggle) {
 if (slider && slides.length > 0) {
   if (currentSlide < 0) currentSlide = 0;
 
+  // Tạo nút chọn ảnh từ danh sách slide; nếu ảnh nhiều hơn 5 thì hiển thị nhóm gần ảnh hiện tại.
   function renderSlideIndicators() {
     if (!slideIndicators) return;
 
@@ -135,6 +157,8 @@ if (slider && slides.length > 0) {
     }
   }
 
+  // Tự chuyển ảnh sau 4 giây. Gọi lại sau mỗi lần đổi ảnh để thời gian bắt đầu lại từ đầu.
+  // Đổi số 4000 (mili giây) nếu muốn điều chỉnh tốc độ; ví dụ 6000 tương đương 6 giây.
   function scheduleAutoplay() {
     window.clearTimeout(autoplayTimer);
     if (slides.length > 1) {
@@ -142,6 +166,7 @@ if (slider && slides.length > 0) {
     }
   }
 
+  // Hiển thị ảnh theo chỉ số, cập nhật trạng thái trợ năng và dấu chấm, sau đó đặt lịch ảnh kế tiếp.
   function showSlide(index) {
     currentSlide = (index + slides.length) % slides.length;
     slides.forEach((slide, slideIndex) => {
@@ -156,16 +181,19 @@ if (slider && slides.length > 0) {
   renderSlideIndicators();
   scheduleAutoplay();
 
+  // Cho phép bấm vào dấu chấm để mở trực tiếp ảnh tương ứng.
   slideIndicators?.addEventListener("click", (event) => {
     const indicator = event.target.closest("[data-slide-index]");
     if (indicator) showSlide(Number(indicator.dataset.slideIndex));
   });
 
+  // Nút mũi tên máy tính: data-direction="-1" là ảnh trước, "1" là ảnh kế tiếp.
   sliderControls?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-direction]");
     if (button) showSlide(currentSlide + Number(button.dataset.direction));
   });
 
+  // Lưu vị trí bắt đầu để nhận biết thao tác vuốt ngang trên màn hình cảm ứng/chuột.
   slider.addEventListener("pointerdown", (event) => {
     pointerStartX = event.clientX;
   });
@@ -174,15 +202,18 @@ if (slider && slides.length > 0) {
     if (pointerStartX === null) return;
     const distance = event.clientX - pointerStartX;
     pointerStartX = null;
+    // Ngưỡng 50px giúp tránh đổi ảnh khi khách chỉ chạm nhẹ; trái/phải chọn ảnh tương ứng.
     if (Math.abs(distance) >= 50) {
       showSlide(currentSlide + (distance < 0 ? 1 : -1));
     }
   });
 
+  // Hủy trạng thái vuốt nếu trình duyệt ngắt pointer giữa chừng.
   slider.addEventListener("pointercancel", () => {
     pointerStartX = null;
   });
 
+  // Cho phép dùng phím mũi tên khi khung slideshow đang được focus bằng bàn phím.
   slider.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft") showSlide(currentSlide - 1);
     if (event.key === "ArrowRight") showSlide(currentSlide + 1);
