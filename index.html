@@ -40,15 +40,11 @@
           <button class="btn btn-next" type="button" data-direction="1" aria-label="Xem ảnh tiếp theo">&#10095;</button>
         </div>
 
-        <div class="swipe-hint" aria-hidden="true">
-          <span class="swipe-hint-arrow">&larr;</span>
-          <span>Vuốt sang trái để xem ảnh</span>
-        </div>
-
         <div class="hero-caption">
+          <div class="slide-indicators" role="group" aria-label="Chọn ảnh"></div>
           <div class="top-tag">Lời thân mời từ</div>
           <h1 class="names">
-            Nguyễn Dương Trường Thịnh
+            Nguyễn Dương <span class="name-nowrap">Trường Thịnh</span>
             <span class="ampersand">&amp;</span>
             Phạm Thị Ngọc Ánh
           </h1>
@@ -230,6 +226,28 @@
     </main>
 
     <footer>Sweet love • Trường Thịnh &amp; Ngọc Ánh</footer>
+
+    <audio
+      id="backgroundMusic"
+      src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+      loop
+      preload="none"
+    ></audio>
+    <button
+      class="audio-toggle is-muted"
+      id="audioToggle"
+      type="button"
+      aria-label="Bật nhạc nền"
+      aria-pressed="false"
+      title="Bật nhạc nền"
+    >
+      <svg class="audio-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M11 5 6 9H3v6h3l5 4V5Z" />
+        <path class="audio-waves" d="M15.5 8.5a5 5 0 0 1 0 7" />
+        <path class="audio-waves" d="M18.5 5.5a9 9 0 0 1 0 13" />
+        <path class="audio-muted-mark" d="m16 9 5 6m0-6-5 6" />
+      </svg>
+    </button>
 
     <script src="script.js"></script>
   </body>

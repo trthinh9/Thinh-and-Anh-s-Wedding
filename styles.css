@@ -140,8 +140,28 @@ a {
   background: rgba(37, 29, 28, 0.8);
 }
 
-.swipe-hint {
-  display: none;
+.slide-indicators {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.slide-indicator {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.slide-indicator[aria-current="true"] {
+  background: white;
+  transform: scale(1.25);
 }
 
 .hero-caption {
@@ -170,6 +190,10 @@ a {
   color: white;
   margin: 0;
   letter-spacing: 0.04em;
+}
+
+.name-nowrap {
+  white-space: nowrap;
 }
 
 .ampersand {
@@ -401,6 +425,51 @@ a {
   transform: translateY(-2px);
 }
 
+.audio-toggle {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 10;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  color: white;
+  background: rgba(20, 18, 18, 0.62);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.audio-icon {
+  width: 21px;
+  height: 21px;
+  overflow: visible;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.audio-muted-mark {
+  display: none;
+}
+
+.audio-toggle.is-muted .audio-waves {
+  display: none;
+}
+
+.audio-toggle.is-muted .audio-muted-mark {
+  display: block;
+}
+
+.audio-toggle:hover {
+  background: rgba(20, 18, 18, 0.82);
+}
+
 .btn-primary {
   background: linear-gradient(135deg, var(--rose), var(--rose-deep));
   color: white;
@@ -577,36 +646,16 @@ footer {
     display: none;
   }
 
-  .swipe-hint {
-    position: absolute;
-    top: max(22px, env(safe-area-inset-top));
-    left: 50%;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 14px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 999px;
-    color: white;
-    background: rgba(37, 29, 28, 0.55);
-    font-size: 0.78rem;
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    pointer-events: none;
-    transform: translateX(-50%);
-    transition: opacity 0.25s ease;
+  .audio-toggle {
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    width: 38px;
+    height: 38px;
   }
 
-  .swipe-hint-arrow {
-    display: inline-block;
-    font-size: 1.25rem;
-    line-height: 1;
-    animation: swipe-arrow-hint 1s ease-in-out infinite;
-  }
-
-  .swipe-hint.is-hidden {
-    opacity: 0;
+  .audio-icon {
+    width: 17px;
+    height: 17px;
   }
 
   .hero-caption {
@@ -687,22 +736,7 @@ footer {
   }
 }
 
-@keyframes swipe-arrow-hint {
-  0%, 100% {
-    opacity: 0.45;
-    transform: translateX(4px);
-  }
-  50% {
-    opacity: 1;
-    transform: translateX(-8px);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .swipe-hint-arrow {
-    animation: none;
-  }
-
   .time-box strong {
     font-size: 2.1rem;
   }

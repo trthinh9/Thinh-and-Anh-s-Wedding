@@ -80,12 +80,67 @@ setInterval(updateCountdown, 1000);
 const slider = document.getElementById("sliderWrapper");
 const slides = slider ? Array.from(slider.querySelectorAll(".slide")) : [];
 const sliderControls = document.querySelector(".slider-controls");
-const swipeHint = document.querySelector(".swipe-hint");
+const slideIndicators = document.querySelector(".slide-indicators");
+const backgroundMusic = document.getElementById("backgroundMusic");
+const audioToggle = document.getElementById("audioToggle");
 let currentSlide = slides.findIndex((slide) => slide.classList.contains("active"));
 let pointerStartX = null;
+let autoplayTimer;
+
+if (backgroundMusic && audioToggle) {
+  audioToggle.addEventListener("click", async () => {
+    if (backgroundMusic.paused) {
+      try {
+        await backgroundMusic.play();
+        audioToggle.classList.remove("is-muted");
+        audioToggle.setAttribute("aria-label", "Tắt nhạc nền");
+        audioToggle.setAttribute("aria-pressed", "true");
+        audioToggle.title = "Tắt nhạc nền";
+      } catch (error) {
+        console.error("Không thể phát nhạc nền:", error);
+        audioToggle.title = "Không thể phát nhạc. Kiểm tra kết nối mạng rồi thử lại.";
+      }
+      return;
+    }
+
+    backgroundMusic.pause();
+    audioToggle.classList.add("is-muted");
+    audioToggle.setAttribute("aria-label", "Bật nhạc nền");
+    audioToggle.setAttribute("aria-pressed", "false");
+    audioToggle.title = "Bật nhạc nền";
+  });
+}
 
 if (slider && slides.length > 0) {
   if (currentSlide < 0) currentSlide = 0;
+
+  function renderSlideIndicators() {
+    if (!slideIndicators) return;
+
+    const indicatorCount = Math.min(slides.length, 5);
+    const firstIndex = Math.min(
+      Math.max(currentSlide - Math.floor(indicatorCount / 2), 0),
+      slides.length - indicatorCount
+    );
+
+    slideIndicators.replaceChildren();
+    for (let index = firstIndex; index < firstIndex + indicatorCount; index += 1) {
+      const indicator = document.createElement("button");
+      indicator.type = "button";
+      indicator.className = "slide-indicator";
+      indicator.setAttribute("aria-label", `Xem ảnh ${index + 1}`);
+      indicator.setAttribute("aria-current", String(index === currentSlide));
+      indicator.dataset.slideIndex = String(index);
+      slideIndicators.append(indicator);
+    }
+  }
+
+  function scheduleAutoplay() {
+    window.clearTimeout(autoplayTimer);
+    if (slides.length > 1) {
+      autoplayTimer = window.setTimeout(() => showSlide(currentSlide + 1), 4000);
+    }
+  }
 
   function showSlide(index) {
     currentSlide = (index + slides.length) % slides.length;
@@ -94,7 +149,17 @@ if (slider && slides.length > 0) {
       slide.classList.toggle("active", isActive);
       slide.setAttribute("aria-hidden", String(!isActive));
     });
+    renderSlideIndicators();
+    scheduleAutoplay();
   }
+
+  renderSlideIndicators();
+  scheduleAutoplay();
+
+  slideIndicators?.addEventListener("click", (event) => {
+    const indicator = event.target.closest("[data-slide-index]");
+    if (indicator) showSlide(Number(indicator.dataset.slideIndex));
+  });
 
   sliderControls?.addEventListener("click", (event) => {
     const button = event.target.closest("[data-direction]");
@@ -111,7 +176,6 @@ if (slider && slides.length > 0) {
     pointerStartX = null;
     if (Math.abs(distance) >= 50) {
       showSlide(currentSlide + (distance < 0 ? 1 : -1));
-      swipeHint?.classList.add("is-hidden");
     }
   });
 
