@@ -32,64 +32,131 @@ function updateCountdown() {
   document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
 }
 
-// LỜI CHÚC: dữ liệu được lưu trong localStorage của trình duyệt/thiết bị đang mở trang.
-// Đổi STORAGE_KEY sẽ tạo một ngăn lưu trữ mới; lời chúc cũ trong ngăn cũ sẽ không bị xóa.
+// LỜI CHÚC: đồng bộ tập trung qua Google Apps Script; localStorage chỉ dùng làm bộ nhớ dự phòng.
 const STORAGE_KEY = "weddingGuestWishes";
+const WISH_API_URL = "https://script.google.com/macros/s/AKfycbx-2cxdW13wD2l1ihONbb-HehNT7OAbq-DFeCg4BbuBTonjlxbj4lgYYxwtSshSXMPR/exec";
 const wishForm = document.getElementById("wishForm");
 const wishList = document.getElementById("wishList");
 const summaryCount = document.getElementById("summaryCount");
 const guestNameInput = document.getElementById("guestName");
 const guestWishInput = document.getElementById("guestWish");
 
-let wishes = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+let wishes = [];
+try {
+  wishes = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  if (!Array.isArray(wishes)) wishes = [];
+} catch (error) {
+  wishes = [];
+}
 
-// Vẽ lại danh sách lời chúc và số lượng sau khi tải trang, thêm lời chúc hoặc xóa dữ liệu.
+function saveWishCache() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(wishes));
+  } catch (error) {
+    console.warn("Không thể lưu bộ nhớ dự phòng trên trình duyệt", error);
+  }
+}
+
 function renderWishes() {
   if (!wishes.length) {
-    wishList.innerHTML = '<div class="empty-state">Chưa có lời chúc nào. Hãy là người đầu tiên gửi lời yêu thương nhé!</div>';
+    wishList.replaceChildren();
+    const empty = document.createElement("div");
+    empty.className = "empty-state";
+    empty.textContent = "Chưa có lời chúc nào. Hãy là người đầu tiên gửi lời yêu thương nhé!";
+    wishList.appendChild(empty);
     summaryCount.textContent = "0 lời chúc";
     return;
   }
 
-  wishList.innerHTML = wishes
-    .map(
-      (item) => `
-        <div class="wish-item">
-          <strong>${item.name}</strong>
-          <p>${item.message}</p>
-        </div>
-      `
-    )
-    .join("");
+  wishList.replaceChildren();
+  wishes.forEach((item) => {
+    const wishItem = document.createElement("div");
+    wishItem.className = "wish-item";
+    const name = document.createElement("strong");
+    name.textContent = item.name || "";
+    const message = document.createElement("p");
+    message.textContent = item.message || "";
+    wishItem.append(name, message);
+    wishList.appendChild(wishItem);
+  });
 
   summaryCount.textContent = `${wishes.length} lời chúc`;
 }
 
-// Khi khách gửi biểu mẫu, lưu tên và lời chúc trên thiết bị rồi xóa nội dung biểu mẫu.
-wishForm.addEventListener("submit", function (event) {
+function loadWishes() {
+  return new Promise((resolve) => {
+    const callbackName = `wishesCallback_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const script = document.createElement("script");
+
+    window[callbackName] = function (data) {
+      if (Array.isArray(data)) {
+        wishes = data.map((item) => ({
+          name: String(item.name || ""),
+          message: String(item.message || "")
+        })).filter((item) => item.name && item.message);
+        saveWishCache();
+      }
+      renderWishes();
+      delete window[callbackName];
+      script.remove();
+      resolve();
+    };
+
+    script.onerror = function () {
+      console.warn("Không thể tải lời chúc từ Google Sheets");
+      delete window[callbackName];
+      script.remove();
+      renderWishes();
+      resolve();
+    };
+
+    script.src = `${WISH_API_URL}?callback=${callbackName}&cache=${Date.now()}`;
+    document.body.appendChild(script);
+  });
+}
+
+wishForm.addEventListener("submit", async function (event) {
   event.preventDefault();
 
   const name = guestNameInput.value.trim();
   const message = guestWishInput.value.trim();
-
   if (!name || !message) return;
 
-  wishes.unshift({ name, message });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(wishes));
-  renderWishes();
-  wishForm.reset();
-  guestNameInput.focus();
+  const submitButton = wishForm.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  submitButton.textContent = "Đang gửi...";
+
+  try {
+    await fetch(WISH_API_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({ name, message })
+    });
+    wishes.unshift({ name, message });
+    saveWishCache();
+    renderWishes();
+
+    wishForm.reset();
+    guestNameInput.focus();
+    setTimeout(loadWishes, 1500);
+  } catch (error) {
+    console.error("Không thể gửi lời chúc lên Google Sheets", error);
+    alert("Không thể gửi lời chúc. Vui lòng thử lại hoặc kiểm tra quyền truy cập của Apps Script.");
+  } finally {
+    submitButton.disabled = false;
+    submitButton.textContent = "Gửi lời chúc";
+  }
 });
 
-// Chỉ xóa lời chúc đã lưu trên trình duyệt hiện tại, không ảnh hưởng thiết bị khác.
-document.getElementById("clearWishes").addEventListener("click", function () {
-  wishes = [];
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(wishes));
-  renderWishes();
+// Làm mới danh sách từ Google Sheets; không xóa dữ liệu chung trên hệ thống.
+document.getElementById("clearWishes").addEventListener("click", async function () {
+  await loadWishes();
 });
 
-// Khôi phục lời chúc đã lưu và bắt đầu cập nhật đồng hồ mỗi giây.
+// Khôi phục lời chúc đã lưu, đồng bộ Google Sheets và bắt đầu cập nhật đồng hồ mỗi giây.
 renderWishes();
+loadWishes();
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
